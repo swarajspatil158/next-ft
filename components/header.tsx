@@ -13,7 +13,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useRouter } from 'next/navigation';
-
+import { logout } from './logout';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +32,7 @@ const Header = () => {
               <h1 className="text-2xl sm:text-4xl font-bold">
                 <span 
                   onClick={() => handleNavigation('/')} 
-                  className="tracking-wider bg-clip-text text-primary/80 cursor-pointer"
+                  className="tracking-wider bg-clip-text text-primary/80 cursor-pointer hover:text-primary transition-colors duration-200"
                 >
                   Next-FT
                 </span>
@@ -43,16 +43,26 @@ const Header = () => {
           <div className="flex items-center gap-4">
             {/* Desktop Navigation */}
             <nav className="hidden sm:block">
-              <ul className="flex items-center gap-6 font-semibold">
+              <ul className="flex items-center gap-6 font-medium">
                 <li>
                   <span 
                     onClick={() => handleNavigation('/dashboard')} 
-                    className="text-primary/90 hover:text-primary/80 transition-colors cursor-pointer"
+                    className="relative text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer py-2 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     Dashboard
                   </span>
                 </li>
-                <li><ModeToggle /></li>
+                <li className="hover:opacity-80 transition-opacity"><ModeToggle /></li>
+                <li>
+                  <Button 
+                    onClick={logout} 
+                    variant="ghost"
+                    size="sm"
+                    className="hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                  >
+                    Logout
+                  </Button>
+                </li>
               </ul>
             </nav>
   
@@ -62,39 +72,29 @@ const Header = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="sm:hidden"
+                  className="sm:hidden hover:bg-primary/10 hover:text-primary transition-colors duration-200"
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className='w-[320px] sm:w-[540px]'>
-                
+              <SheetContent side="right" className="w-[320px] sm:w-[540px]">
                 <SheetHeader>
-                  <SheetTitle className="sr-only">
-                    <span className='flex items-center justify-between cursor-pointer'>
-                      <span onClick={() => handleNavigation('/')}>Next-FT</span> 
-                     
-                      <span></span>
-                    </span>
-                  </SheetTitle>
-                  <SheetDescription className="sr-only">Description goes here</SheetDescription>
+                  <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                  <SheetDescription className="sr-only">Navigation options</SheetDescription>
                 </SheetHeader>
-                <nav className="mt-1">
-                  <ul className="flex flex-col gap-1 font-semibold">
-                  <li>
-                      <span 
-                       
-                        className=" mx-auto text-primary hover:text-primary/80 transition-colors cursor-pointer font-thin flex items-center justify-center "
-                      >
-                       <span className='bg-muted rounded-full px-2'>
-                       <ModeToggle />
+                <nav className="mt-8">
+                  <ul className="flex flex-col gap-6 font-medium">
+                    <li>
+                      <span className="flex items-center justify-center">
+                        <span className="bg-muted rounded-full px-4 py-2 hover:bg-muted/80 transition-colors duration-200">
+                          <ModeToggle />
                         </span>   
                       </span>
                     </li>
                     <li>
                       <span 
                         onClick={() => handleNavigation('/')}
-                        className="text-primary/90 hover:text-primary/80 transition-colors cursor-pointer"
+                        className="block text-center text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer py-2 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-1/2 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-16 after:-translate-x-1/2"
                       >
                         Home
                       </span>
@@ -102,9 +102,21 @@ const Header = () => {
                     <li>
                       <span 
                         onClick={() => handleNavigation('/dashboard')}
-                        className="text-primary/90 hover:text-primary/80 transition-colors cursor-pointer"
+                        className="block text-center text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer py-2 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-1/2 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-24 after:-translate-x-1/2"
                       >
                         Dashboard
+                      </span>
+                    </li>
+                    <li>
+                      <span className="flex items-center justify-center mt-4">
+                        <Button 
+                          onClick={logout} 
+                          variant="outline"
+                          size="sm"
+                          className="w-32 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                        >
+                          Logout
+                        </Button>
                       </span>
                     </li>
                   </ul>
@@ -115,6 +127,6 @@ const Header = () => {
         </div>
       </header>
     );
-  };
+};
 
 export default Header;
