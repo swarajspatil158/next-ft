@@ -24,15 +24,14 @@ const Header = ({ session }) => {
     };
   
     return (
-      <header className="absolute right-0 z-50 p-1">
+      <header className="absolute right-0 z-50 p-4">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="icon"
-                  className="hover:bg-primary/10 hover:text-primary transition-colors duration-200"
                 >
-                  <Menu className="h-6 w-6" />
+                  <Menu className="" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[320px] sm:w-[540px]">
@@ -65,7 +64,7 @@ const Header = ({ session }) => {
                           onClick={logout} 
                           variant="outline"
                           size="sm"
-                          className="w-32 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                          className=""
                           >
                           Logout
                         </Button>
