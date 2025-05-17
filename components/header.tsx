@@ -13,12 +13,13 @@ import {
 } from "@/components/ui/sheet";
 import { useRouter } from 'next/navigation';
 import { logout } from './logout';
+import { TokenPayload } from '@/types/token';
 
-const Header = ({ session }) => {
+const Header = ({ session } : { session: TokenPayload | null }) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
   
-    const handleNavigation = (path) => {
+    const handleNavigation = (path: string) => {
       router.push(path);
       setIsOpen(false);
     };

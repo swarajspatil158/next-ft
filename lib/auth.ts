@@ -1,4 +1,5 @@
 'use server'
+import { TokenPayload } from "@/types/token";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -6,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 const secretKey = process.env.PASSWORD_SECRET;
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
+export async function encrypt(payload: TokenPayload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -14,11 +15,12 @@ export async function encrypt(payload: any) {
     .sign(key);
 }
 
-export async function decrypt(input: string): Promise<any> {
+export async function decrypt(input: string): Promise<TokenPayload> {
   const { payload } = await jwtVerify(input, key, {
     algorithms: ["HS256"],
   });
-  return payload;
+  const tokenPayload = payload as TokenPayload;
+  return tokenPayload;
 }
 
 export async function login(code:string) {
@@ -56,6 +58,7 @@ export async function updateSession(request: NextRequest) {
       if (!session) return NextResponse.next();
   
       const parsed = await decrypt(session);
+      console.log("parsed: ", parsed)
       
       // Check if session is expired
       if (new Date(parsed.expires) < new Date() || parsed.user.code !== process.env.PASSWORD ) {
