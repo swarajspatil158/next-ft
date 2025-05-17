@@ -4,39 +4,17 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ArrowUpRightIcon from './Icons/ArrowUpRightIcon';
+import { useFormBuilder } from '@/hooks/useFormBuilder';
 import FormActions from './FormActions';
-interface Question {
-  id: string;
-  type: 'input' | 'textarea' | 'radio' | 'number' | 'url' | 'date';
-  question?: string;
-  helpText?: string;
-  options?: string[];
-}
-interface Form {
-  id?: string;
-  title: string;
-  questions: Question[];
-  isDraft?: boolean;
-  isPublished?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+
 interface CreateFormLayoutProps {
   children: React.ReactNode;
 }
 
 const CreateFormLayout: React.FC<CreateFormLayoutProps> = ({ children }) => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [form, setForm] = useState<Form>({
-    title: 'Untitled form',
-    questions: [],
-    isDraft: true,
-    isPublished: false
-  });
-  const updateTitle = (title: string) => {
-    setForm(prev => ({ ...prev, title }));
-  };
+  const { form, isLoading, updateTitle, saveDraft, publishForm } = useFormBuilder();
+
   const handleTitleBlur = () => setIsEditingTitle(false);
   
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -53,7 +31,6 @@ const CreateFormLayout: React.FC<CreateFormLayoutProps> = ({ children }) => {
         <div className="flex items-center gap-2">
           {isEditingTitle ? (
             <Input
-              type="text"
               value={form.title}
               onChange={(e) => updateTitle(e.target.value)}
               onBlur={handleTitleBlur}
@@ -62,18 +39,20 @@ const CreateFormLayout: React.FC<CreateFormLayoutProps> = ({ children }) => {
               autoFocus
             />
           ) : (
-            <Button
-              variant='ghost'
-              size='sm'
-              className="flex items-center px-2 mx-0 text-muted-foreground"
+            <button
+              type="button"
+              className="flex items-center gap-2 text-muted-foreground"
               onClick={handleTitleClick}
             >
               <span className="text-base font-semibold">{form.title}</span>
-            </Button>
+            </button>
           )}
         </div>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className='hidden md:flex'>
           Preview
+          <ArrowUpRightIcon />
+        </Button>
+        <Button variant="outline" size="sm" className='md:hidden'>
           <ArrowUpRightIcon />
         </Button>
       </header>
@@ -85,10 +64,8 @@ const CreateFormLayout: React.FC<CreateFormLayoutProps> = ({ children }) => {
       <FormActions
         formId={form.id}
         isLoading={isLoading}
-        onSaveDraft={async () => {
-        }}
-        onPublish={async () => {
-        }}
+        onSaveDraft={saveDraft}
+        onPublish={publishForm}
       />
     </div>
   );

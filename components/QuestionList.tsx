@@ -1,9 +1,12 @@
 import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import FormattedDateInput from "./ui/formatted-date-input";
-
-type QuestionType = 'input' | 'textarea' | 'number' | 'url' | 'date';
+import DynamicInputs from "./DynamicInputs";
+import QuestionField from "@/components/QuestionField";
+import AddQuestionDropdown, { QuestionType } from "@/components/AddQuestionDropdown";
 
 interface Question {
   id: string;
@@ -30,6 +33,11 @@ const QuestionInputMap: Record<QuestionType, React.FC<{ className?: string }>> =
       className={`resize-none ${className}`}
     />
   ),
+  radio: ({  }) => (
+    <DynamicInputs
+      
+    />
+  ),
   number: ({ className }) => (
     <Input
       type="number"
@@ -53,49 +61,74 @@ const QuestionInputMap: Record<QuestionType, React.FC<{ className?: string }>> =
   ),
 };
 
-const QuestionList: React.FC<QuestionListProps> = () => {
-  const [questions, setQuestions] = React.useState<Question[]>([
-    {
-      id: '1',
-      type: 'input',
-      question: 'What is your name?',
-    },
-    {
-      id: '2',
-      type: 'textarea',
-      question: 'Tell us about yourself',
-    },
-    {
-      id: '3',
-      type: 'number',
-      question: 'How old are you?',
-    },
-    {
-      id: '4',
-      type: 'url',
-      question: 'What is your favorite website?',
-    },
-    {
-      id: '5',
-      type: 'date',
-      question: 'When is your birthday?',
-    },
-  ]);
+const QuestionList: React.FC<QuestionListProps> = ({ onQuestionAdd }) => {
+  const [questions, setQuestions] = React.useState<Question[]>([]);
+
+  const addQuestion = (type: QuestionType) => {
+    const newQuestion: Question = {
+      id: Math.random().toString(36).substring(7),
+      type
+    };
+    setQuestions([...questions, newQuestion]);
+    
+    setTimeout(() => {
+      onQuestionAdd?.();
+    }, 0);
+  };
+
+  const removeQuestion = (id: string) => {
+    setQuestions(questions.filter(q => q.id !== id));
+  };
+
+  const handleTypeChange = (id: string, newType: QuestionType) => {
+    setQuestions(questions.map(q => 
+      q.id === id ? { ...q, type: newType } : q
+    ));
+  };
+
+  const handleQuestionChange = (id: string, question: string) => {
+    setQuestions(questions.map(q => 
+      q.id === id ? { ...q, question } : q
+    ));
+  };
+
+  const handleHelpTextChange = (id: string, helpText: string) => {
+    setQuestions(questions.map(q => 
+      q.id === id ? { ...q, helpText } : q
+    ));
+  };
+
+  const renderQuestionInput = (type: QuestionType) => {
+    const InputComponent = QuestionInputMap[type];
+    return <InputComponent className="mt-2.5" />;
+  };
 
   return (
-    <div className="space-y-6 flex flex-col align-start mb-[40vh] my-4 mx-auto max-w-[592px]">
+    <div className="space-y-1 flex flex-col align-start mb-[40vh] my-4 mx-auto max-w-[592px]">
       {questions.map((question) => (
-        <div key={question.id} className="relative group border border-gray-200 rounded-md p-4 hover:border-gray-300 transition-all">
-          <div className="mb-2">
-            <h3 className="text-lg font-medium text-gray-800">{question.question}</h3>
-            {question.helpText && (
-              <p className="text-sm text-gray-500 mt-1">{question.helpText}</p>
-            )}
-          </div>
-          
-          {QuestionInputMap[question.type]({ className: "w-full" })}
+        <div key={question.id} className="relative group ">
+          <QuestionField 
+            selectedType={question.type}
+            onTypeChange={(newType) => handleTypeChange(question.id, newType)}
+            onQuestionChange={(value) => handleQuestionChange(question.id, value)}
+            onHelpTextChange={(value) => handleHelpTextChange(question.id, value)}
+            question={question.question}
+            helpText={question.helpText}
+          >
+            {renderQuestionInput(question.type)}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute -right-1 -top-0  opacity-0   group-hover:opacity-100 transition-all delay-75 w-6"
+              onClick={() => removeQuestion(question.id)}
+            >
+              <X className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </QuestionField>
         </div>
       ))}
+
+      <AddQuestionDropdown onAddQuestion={addQuestion} />
     </div>
   );
 };

@@ -25,12 +25,12 @@ const Header = ({ session } : { session: TokenPayload | null }) => {
     };
   
     return (
-      <header className="absolute right-0 z-50 p-4">
+      <header className="fixed right-16 md:right-0 z-50 p-2 py-4 md:p-4 md:px-1 lg:px-4">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="sm"
                 >
                   <Menu className="" />
                 </Button>
