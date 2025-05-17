@@ -58,7 +58,6 @@ export async function updateSession(request: NextRequest) {
       if (!session) return NextResponse.next();
   
       const parsed = await decrypt(session);
-      console.log("parsed: ", parsed)
       
       // Check if session is expired
       if (new Date(parsed.expires) < new Date() || parsed.user.code !== process.env.PASSWORD ) {
