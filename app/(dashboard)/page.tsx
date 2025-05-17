@@ -1,9 +1,20 @@
-export default async function Home() {
+'use client'
+
+import * as React from "react";
+import QuestionList from "@/components/QuestionList";
+import CreateFormLayout from "@/components/CreateFormLayout";
+
+export default function Home() {
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <>
-      <main className="flex-grow flex flex-col pt-24 relative max-w-3xl mx-auto w-full px-4">
-        Home Page
-      </main>
-    </>
+    <CreateFormLayout>
+      <QuestionList onQuestionAdd={scrollToBottom} />
+    </CreateFormLayout>
   );
 }
