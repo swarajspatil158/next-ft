@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../../globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
-import Header from "@/components/header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,18 +32,10 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
           <div className="min-h-screen w-full flex flex-col font-[family-name:var(--font-sans)] relative bg-gradient-to-br from-background via-background to-background">
             <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
-            <Header />
             {children}
           </div>
-        </ThemeProvider>
       </body>
     </html>
   );

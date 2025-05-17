@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { updateSession } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
+  console.log(request.nextUrl.pathname)
   // Check if current path is exactly "/sign-in"
   if (request.nextUrl.pathname === '/sign-in') {
     // If user is already logged in, redirect to dashboard or home
@@ -25,6 +26,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api/auth|_next/static|_next/image|favicon.ico|public/).*)',
+    '/((?!api/auth|_next/static|_next/image|favicon.ico|site.webmanifest|public).*)',
   ],
 };

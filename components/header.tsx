@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
-import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -15,7 +14,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { logout } from './logout';
 
-const Header = () => {
+const Header = ({ session }) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
   
@@ -52,17 +51,19 @@ const Header = () => {
                     Dashboard
                   </span>
                 </li>
-                <li className="hover:opacity-80 transition-opacity"><ModeToggle /></li>
-                <li>
+                {
+                  session ?
+                  <li>
                   <Button 
                     onClick={logout} 
                     variant="ghost"
                     size="sm"
                     className="hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                  >
+                    >
                     Logout
                   </Button>
-                </li>
+                  </li> : null
+                  }
               </ul>
             </nav>
   
@@ -85,13 +86,6 @@ const Header = () => {
                 <nav className="mt-8">
                   <ul className="flex flex-col gap-6 font-medium">
                     <li>
-                      <span className="flex items-center justify-center">
-                        <span className="bg-muted rounded-full px-4 py-2 hover:bg-muted/80 transition-colors duration-200">
-                          <ModeToggle />
-                        </span>   
-                      </span>
-                    </li>
-                    <li>
                       <span 
                         onClick={() => handleNavigation('/')}
                         className="block text-center text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer py-2 relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-1/2 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-16 after:-translate-x-1/2"
@@ -107,6 +101,7 @@ const Header = () => {
                         Dashboard
                       </span>
                     </li>
+                    {session ? 
                     <li>
                       <span className="flex items-center justify-center mt-4">
                         <Button 
@@ -114,11 +109,12 @@ const Header = () => {
                           variant="outline"
                           size="sm"
                           className="w-32 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                        >
+                          >
                           Logout
                         </Button>
                       </span>
                     </li>
+                          : null}
                   </ul>
                 </nav>
               </SheetContent>

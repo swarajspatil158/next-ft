@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
+import { getSession } from "@/lib/auth";
 import Header from "@/components/header";
-
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -22,11 +21,12 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession()
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -35,18 +35,12 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        
           <div className="min-h-screen w-full flex flex-col font-[family-name:var(--font-sans)] relative bg-gradient-to-br from-background via-background to-background">
             <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
-            <Header />
+            <Header session={session} />
             {children}
           </div>
-        </ThemeProvider>
       </body>
     </html>
   );
