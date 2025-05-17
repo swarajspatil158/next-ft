@@ -35,12 +35,8 @@ export default async function RootLayout({
           inter.variable
         )}
       >
-        
-          <div className="min-h-screen w-full flex flex-col font-[family-name:var(--font-sans)] relative bg-gradient-to-br from-background via-background to-background">
-            <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
             <Header session={session} />
             {children}
-          </div>
       </body>
     </html>
   );

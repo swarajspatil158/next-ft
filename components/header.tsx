@@ -24,56 +24,13 @@ const Header = ({ session }) => {
     };
   
     return (
-      <header className="max-w-3xl mx-auto fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-sm z-50 p-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div>
-              <h1 className="text-2xl sm:text-4xl font-bold">
-                <span 
-                  onClick={() => handleNavigation('/')} 
-                  className="tracking-wider bg-clip-text text-primary/80 cursor-pointer hover:text-primary transition-colors duration-200"
-                >
-                  Next-FT
-                </span>
-              </h1>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            {/* Desktop Navigation */}
-            <nav className="hidden sm:block">
-              <ul className="flex items-center gap-6 font-medium">
-                <li>
-                  <span 
-                    onClick={() => handleNavigation('/dashboard')} 
-                    className="relative text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer py-2 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full"
-                  >
-                    Dashboard
-                  </span>
-                </li>
-                {
-                  session ?
-                  <li>
-                  <Button 
-                    onClick={logout} 
-                    variant="ghost"
-                    size="sm"
-                    className="hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                    >
-                    Logout
-                  </Button>
-                  </li> : null
-                  }
-              </ul>
-            </nav>
-  
-            {/* Mobile Navigation with Sheet */}
+      <header className="absolute right-0 z-50 p-1">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="sm:hidden hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                  className="hover:bg-primary/10 hover:text-primary transition-colors duration-200"
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
@@ -119,8 +76,8 @@ const Header = ({ session }) => {
                 </nav>
               </SheetContent>
             </Sheet>
-          </div>
-        </div>
+        
+       
       </header>
     );
 };
